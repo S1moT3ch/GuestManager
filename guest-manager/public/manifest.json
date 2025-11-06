@@ -1,20 +1,20 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Table Manager",
+  "name": "Table Manager",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "Logo_TM.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
+      "src": "Logo_TM.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
-      "type": "image/png",
+      "src": "Logo_TM_512.ico",
+      "type": "image/x-icon",
       "sizes": "512x512"
     }
   ],

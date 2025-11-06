@@ -12,14 +12,20 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
 
-export default function SushiScanner({ excelData, tavoloCorrente }) {
+import HeaderBar from "./HeaderBar";
+import FooterBar from "./FooterBar";
+
+export default function ScannerComponent({ excelData, tavoloCorrente }) {
     const [scanning, setScanning] = useState(false);
     const [result, setResult] = useState("");
     const [progress, setProgress] = useState(0);
     const [searching, setSearching] = useState(false);
     const [stageText, setStageText] = useState("");
+    const [isError, setIsError] = useState(false);
     const scannerRef = useRef(null);
     const readerRef = useRef(null);
+
+    const [loadedAudio, setLoadedAudio]=useState(null);
 
     const stages = [
         "Analisi identificatore QR...",
@@ -57,30 +63,92 @@ export default function SushiScanner({ excelData, tavoloCorrente }) {
 
     const handleScan = (text) => {
         if (!text) return;
+
+        loadedAudio.play().catch((err) => console.warn("Errore audio:", err));
+
         setScanning(false);
 
         simulateProgress(() => {
-            const [nome, cognome] = text.trim().split(" ");
-            if (!nome || !cognome) {
-                setResult("⚠️ Il QR deve contenere Nome e Cognome separati da spazio.");
+
+            const parts = text.trim().split(/\s+/);
+            const nome = parts[0];
+            const cognome = parts[1];
+
+            if (!nome) {
+                setResult("⚠️ Il QR deve contenere almeno un nome.");
                 return;
             }
 
-            const found = excelData.find(
+            if (!cognome) {
+                const nameFound = excelData.find(
+                    (row) => row.Nome?.toLowerCase() === nome.toLowerCase()
+                );
+
+                if (!nameFound) {
+                    setResult(`😕 ${nome} non è presente nella lista.`);
+                } else if (nameFound.Tavolo?.toString() === tavoloCorrente.toString()) {
+                    const sesso = nameFound.Sesso?.toString().toUpperCase();
+                    const benvenutoTesto = sesso === "F" ? "Benvenuta" : "Benvenuto";
+                    setResult(
+                        <>
+                            Ciao <strong>{nome}</strong>.<br />
+                            {benvenutoTesto}.<br />
+                            Questo è il tuo tavolo. Accomodati pure!
+                        </>
+                    );
+                    setIsError(false);
+                } else {
+                    const sesso = nameFound.Sesso?.toString().toUpperCase();
+                    const benvenutoTesto = sesso === "F" ? "benvenuta" : "benvenuto";
+                    setResult(
+                        <>
+                            Ciao <strong>{nome}</strong>, {benvenutoTesto}!<br />
+                            Hai seguito correttamente le indicazioni.<br />
+                            Sei nel <strong>posto giusto</strong> per festeggiare con me!<br />
+                            Questo, però, non è il tavolo dove trascorrerai la serata.<br />
+                            Devi ancora cercare.
+                        </>
+                    );
+                    setIsError(true);
+                }
+
+                setProgress(0);
+                setStageText("");
+                return;
+            }
+
+            const allFound = excelData.find(
                 (row) =>
                     row.Nome?.toLowerCase() === nome.toLowerCase() &&
                     row.Cognome?.toLowerCase() === cognome.toLowerCase()
             );
 
-            if (!found) {
+            if (!allFound) {
                 setResult(`😕 ${nome} ${cognome} non è presente nella lista.`);
-            } else if (found.Tavolo?.toString() === tavoloCorrente.toString()) {
-                setResult(`Ciao ${nome} ${cognome}. Benvenuto. Questo è il tuo tavolo. Accomodati pure!`);
-            } else {
+            } else if (allFound.Tavolo?.toString() === tavoloCorrente.toString()) {
+                const sesso = allFound.Sesso?.toString().toUpperCase();
+                const benvenutoTesto = sesso === "F" ? "Benvenuta" : "Benvenuto";
                 setResult(
-                    `Ciao ${nome} ${cognome}, benvenuto! Hai seguito correttamente le indicazioni. Sei nel posto giusto
-                    per festeggiare con me! Questo, però, non è il tavolo dove trascorrerai la serata. Devi ancora cercare.`
+                    <>
+                        Ciao <strong>{nome} {cognome}</strong>.<br />
+                        {benvenutoTesto}.<br />
+                        Questo è il tuo tavolo. Accomodati pure!
+                    </>
                 );
+                setIsError(false);
+            } else {
+                const sesso = allFound.Sesso?.toString().toUpperCase();
+                const benvenutoTesto = sesso === "F" ? "benvenuta" : "benvenuto";
+                setResult(
+                    <>
+                        Ciao <strong>{nome} {cognome}</strong>, {benvenutoTesto}!<br />
+                        Hai seguito correttamente le indicazioni.<br />
+                        Sei nel <strong>posto giusto</strong> per festeggiare con me!<br />
+                        Questo, però, non è il tavolo dove trascorrerai la serata.<br />
+                        Devi ancora cercare.
+                    </>
+                );
+                setIsError(true);
             }
 
             setProgress(0);
@@ -130,6 +198,11 @@ export default function SushiScanner({ excelData, tavoloCorrente }) {
             stopScanner();
         };
     }, [scanning]);
+
+    useEffect(() => {
+        const audio = new Audio("/beep.mp3");
+        setLoadedAudio(audio);
+    }, []);
 
     const renderSciFiHorizontalBar = () => {
         const segments = 20;
@@ -205,23 +278,30 @@ export default function SushiScanner({ excelData, tavoloCorrente }) {
         );
     };
 
+    const boxBg = isError ? "#ffeee9" : "#e8f5e9";
+    const boxColor = isError ? "#c62828" : "#2e7d32";
+    const Icon = isError ? ErrorIcon : CheckCircleIcon;
+
     return (
         <Box
             sx={{
-                width: "88vw",
-                minHeight: "86vh",
+                width: "100vw",
+                minHeight: "70vh",
                 bgcolor: "#faf7f2",
                 color: "#333",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                justifyContent: "center",
-                p: 3,
+                justifyContent: "space-around",
+                pt: "90px",
+                pb: "80px",
             }}
         >
+            <HeaderBar />
+
             <Card
                 sx={{
-                    width: "90%",
+                    width: "80%",
                     maxWidth: 400,
                     borderRadius: 3,
                     boxShadow: 3,
@@ -233,7 +313,7 @@ export default function SushiScanner({ excelData, tavoloCorrente }) {
                 <CardContent>
                     <RestaurantMenuIcon sx={{ fontSize: 40, color: "#f57c00" }} />
                     <Typography variant="h5" sx={{ mb: 2, mt: 1 }}>
-                        Guest Scanner
+                        Dov'è il tuo posto?
                     </Typography>
 
                     {!scanning ? (
@@ -307,23 +387,27 @@ export default function SushiScanner({ excelData, tavoloCorrente }) {
                                     mt: 3,
                                     p: 2,
                                     borderRadius: 2,
-                                    bgcolor: result.includes("però")
-                                        ? "#ffebee"
-                                        : "#e8f5e9",
-                                    color: result.includes("però") ? "#c62828" : "#2e7d32",
+                                    bgcolor: boxBg,
+                                    color: boxColor,
+                                    display: "flex",
+                                    flexDirection:"column",
+                                    alignItems: "center",
+                                    gap: 1.5,
+                                    boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
                                 }}
                             >
-                                {result.includes("però") ? (
-                                    <ErrorIcon sx={{ verticalAlign: "middle", mr: 1 }} />
-                                ) : (
-                                    <CheckCircleIcon sx={{ verticalAlign: "middle", mr: 1 }} />
-                                )}
-                                {result}
+                                <Icon sx={{ fontSize: 40 }} />
+                                <Typography variant="h1" sx={{ lineHeight: 1.4, fontSize:"1.3rem", whiteSpace: "pre-line" }}>
+                                    {result}
+                                </Typography>
                             </Box>
+
                         </>
                     )}
                 </CardContent>
             </Card>
+
+            <FooterBar />
         </Box>
     );
 }
