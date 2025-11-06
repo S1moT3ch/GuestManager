@@ -286,15 +286,13 @@ export default function ScannerComponent({ excelData, tavoloCorrente }) {
         <Box
             sx={{
                 width: "100vw",
-                minHeight: "70vh",
+                height: "95vh",
                 bgcolor: "#faf7f2",
                 color: "#333",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                justifyContent: "space-around",
-                pt: "90px",
-                pb: "80px",
+                justifyContent: "space-between",
             }}
         >
             <HeaderBar />
@@ -308,6 +306,7 @@ export default function ScannerComponent({ excelData, tavoloCorrente }) {
                     p: 3,
                     textAlign: "center",
                     bgcolor: "#fff",
+                    margin: "10rem",
                 }}
             >
                 <CardContent>
