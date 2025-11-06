@@ -286,7 +286,7 @@ export default function ScannerComponent({ excelData, tavoloCorrente }) {
         <Box
             sx={{
                 width: "100vw",
-                height: "95vh",
+                height: "100vh",
                 bgcolor: "#faf7f2",
                 color: "#333",
                 display: "flex",
