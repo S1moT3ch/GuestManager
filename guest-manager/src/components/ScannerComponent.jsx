@@ -311,8 +311,13 @@ export default function ScannerComponent({ excelData, tavoloCorrente }) {
                 }}
             >
                 <CardContent>
-                    <RestaurantMenuIcon sx={{ fontSize: 40, color: "#f57c00" }} />
-                    <Typography variant="h5" sx={{ mb: 2, mt: 1 }}>
+                    {!scanning && !searching && !result && (
+                        <img
+                            src="./Logo_TM.png" alt="Logo TM"
+                            style={{ width: "10rem", height: "auto", borderRadius: "20px", marginBottom: "20px" }}
+                        />
+                    )}
+                    <Typography variant="h5" sx={{ mb: 2, mt: 1, color:"#b22222" }}>
                         Dov'è il tuo posto?
                     </Typography>
 
@@ -372,7 +377,7 @@ export default function ScannerComponent({ excelData, tavoloCorrente }) {
 
                     {progress > 0 && (
                         <>
-                            <Typography variant="body2" sx={{ mt: 2 }}>
+                            <Typography variant="body2" sx={{ m: 2, fontSize:"1.5rem", color:"#b22222", width: "auto", height: "4.5rem" }}>
                                 {stageText}
                             </Typography>
                             {renderSciFiHorizontalBar()}
