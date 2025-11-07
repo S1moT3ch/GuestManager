@@ -27,6 +27,8 @@ export default function ScannerComponent({ excelData, tavoloCorrente }) {
 
     const [loadedAudio, setLoadedAudio]=useState(null);
 
+    const [whereA, setWhereA] = useState(false);
+
     const stages = [
         "Analisi identificatore QR...",
         "Ricerca nel database...",
@@ -292,7 +294,7 @@ export default function ScannerComponent({ excelData, tavoloCorrente }) {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                justifyContent: "space-between",
+                justifyContent: "center",
             }}
         >
             <HeaderBar />
@@ -300,13 +302,13 @@ export default function ScannerComponent({ excelData, tavoloCorrente }) {
             <Card
                 sx={{
                     width: "80%",
-                    maxWidth: 400,
+                    height: "auto",
                     borderRadius: 3,
                     boxShadow: 3,
                     p: 3,
                     textAlign: "center",
                     bgcolor: "#fff",
-                    margin: "10rem",
+
                 }}
             >
                 <CardContent>
@@ -411,7 +413,13 @@ export default function ScannerComponent({ excelData, tavoloCorrente }) {
                 </CardContent>
             </Card>
 
-            <FooterBar />
+            {!scanning && !searching && !result && whereA && (
+                <Typography variant="h1" sx={{ lineHeight: 1.4, fontSize:"1.3rem", whiteSpace: "pre-line", marginTop: 2, color: "red" }}>
+                    Ehi tu, hai taggato Dove Abiti ?
+                </Typography>
+            )}
+
+            <FooterBar whereA={whereA} setWhereA={setWhereA} />
         </Box>
     );
 }

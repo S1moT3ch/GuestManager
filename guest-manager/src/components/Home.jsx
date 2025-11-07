@@ -32,7 +32,8 @@ export default function Home() {
                     <CardContent>
                         <SetupComponent onSetupComplete={setSetupData} />
                         <Button
-                            variant="contained"
+                            variant="outlined"
+                            color="secondary"
                             fullWidth
                             sx={{ mt: 2 }}
                             onClick={() => setIsGenerator(!isGenerator)}

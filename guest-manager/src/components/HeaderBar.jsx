@@ -12,6 +12,7 @@ export default function HeaderBar() {
                 display: "flex",
                 alignItems: "center",
                 position: "fixed",
+                top: "0",
                 zIndex: 1001,
                 justifyContent: "center",
                 color: "#fff",

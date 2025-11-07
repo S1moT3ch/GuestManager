@@ -1,11 +1,12 @@
-import React from "react";
+import React, {useState} from "react";
 import { Box, Button } from "@mui/material";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import TableRestaurantIcon from '@mui/icons-material/TableRestaurant';
 import TapasIcon from '@mui/icons-material/Tapas';
 import FlatwareIcon from '@mui/icons-material/Flatware';
 
-export default function FooterBar() {
+export default function FooterBar({ whereA, setWhereA }) {
+
     return (
         <Box
             sx={{
@@ -28,7 +29,7 @@ export default function FooterBar() {
                 sx={{
                     bgcolor: "#f57c00",
                     "&:hover": { bgcolor: "#ef6c00", boxShadow: 0 },
-                    width: "25vw",
+                    width: "16.7vw",
                     height: 50,
                     borderRadius: 0,
                     boxShadow: 0,
@@ -42,7 +43,21 @@ export default function FooterBar() {
                 sx={{
                     bgcolor: "#f57c00",
                     "&:hover": { bgcolor: "#ef6c00", boxShadow: 0 },
-                    width: "25vw",
+                    width: "16.7vw",
+                    height: 50,
+                    borderRadius: 0,
+                    boxShadow: 0,
+                    borderRight: "2px solid #ef5c00",
+                }}
+            >
+                <img src="/Logo_TG.png" alt="Logo_ACB" style={{ width:"0.8rem", height:"auto" }}/>
+            </Button>
+            <Button
+                variant="contained"
+                sx={{
+                    bgcolor: "#f57c00",
+                    "&:hover": { bgcolor: "#ef6c00", boxShadow: 0 },
+                    width: "16.7vw",
                     height: 50,
                     borderRadius: 0,
                     boxShadow: 0,
@@ -56,21 +71,7 @@ export default function FooterBar() {
                 sx={{
                     bgcolor: "#f57c00",
                     "&:hover": { bgcolor: "#ef6c00", boxShadow: 0 },
-                    width: "25vw",
-                    height: 50,
-                    borderRadius: 0,
-                    boxShadow: 0,
-                    borderRight: "2px solid #ef5c00",
-                }}
-            >
-                <TapasIcon />
-            </Button>
-            <Button
-                variant="contained"
-                sx={{
-                    bgcolor: "#f57c00",
-                    "&:hover": { bgcolor: "#ef6c00", boxShadow: 0 },
-                    width: "25vw",
+                    width: "16.7vw",
                     height: 50,
                     borderRadius: 0,
                     boxShadow: 0,
@@ -78,6 +79,36 @@ export default function FooterBar() {
                 }}
             >
                 <FlatwareIcon />
+            </Button>
+            <Button
+                variant="contained"
+                onClick={() => setWhereA(true)}
+                sx={{
+                    bgcolor: "#f57c00",
+                    "&:hover": { bgcolor: "#ef6c00", boxShadow: 0 },
+                    width: "16.7vw",
+                    height: 50,
+                    borderRadius: 0,
+                    boxShadow: 0,
+                    borderRight: "2px solid #ef5c00",
+                }}
+            >
+                <img src="/Logo_ACB.png" alt="Logo_ACB" style={{ width:"3.8rem", height:"auto" }}/>
+            </Button>
+            <Button
+                variant="contained"
+                onClick={() => setWhereA(false)}
+                sx={{
+                    bgcolor: "#f57c00",
+                    "&:hover": { bgcolor: "#ef6c00", boxShadow: 0 },
+                    width: "16.7vw",
+                    height: 50,
+                    borderRadius: 0,
+                    boxShadow: 0,
+                    borderRight: "2px solid #ef5c00",
+                }}
+            >
+                <img src="/Logo_DA.png" alt="Logo_ACB" style={{ width:"2.5rem", height:"auto" }}/>
             </Button>
         </Box>
     );
